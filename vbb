@@ -1,0 +1,91 @@
+const express = require('express')
+const cors = require('cors')
+require('dotenv').config()
+const routes = require('./routes/routes')
+const router = express.Router()
+const app =express()
+app.use(cors())
+app.use(express.json)
+app.use('minha_api' ,routes)
+const PORT = process.env.PORT || 3000
+
+
+app.listen(PORT, ()=>{
+    console.log('Servidor rodando na porta ${PORT}')
+})
+
+
+
+
+router.get('/' , (req, res) => {
+    res.json ({mensagem:"   API funcionando"})
+})
+
+
+router.get('/usuarios', (req,res) =>{
+const usuarios = [
+{id:1, nome:"Ana" ,  idade:30},
+{id:2, nome:"Carlos", idade:25},
+{id:3, nome:"Maria", idade:28}]
+
+
+res.json(usuarios)
+}
+)
+
+
+module.exports = router
+
+
+
+
+
+
+
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`)
+})
+
+
+app.get('/alunos/:id' , (req, res) => {
+    const id = parseInt(req.params.id)
+    const aluno = alunos.find(a => a.id === id)
+    if (!aluno) {
+        return res.status(404).json({
+            sucess : false,
+            message: 'Aluno não encontrado'
+        })
+    }
+    res.json({
+        sucess: true,
+        data:aluno
+    })
+        })
+
+
+
+
+        //post -criar aluno
+
+
+        app.post('/alunos', (req, res) => {
+            const { nome, idade } = req.body
+            if (!nome || !idade) {
+                return res.status(400).json({
+                    sucess: false,
+                    message: 'Nome e idade são obrigatórios'
+                })
+            }
+            const novoAluno = {
+                id: alunos.length + 1,
+                nome,
+                idade
+            }
+            alunos.push(novoAluno)
+            res.status(201).json({
+                sucess: true,
+                data: novoAluno
+            })
+        })
+
